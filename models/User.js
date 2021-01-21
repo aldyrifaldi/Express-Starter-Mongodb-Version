@@ -10,10 +10,13 @@ const User = function(user) {
 
 
 User.create = (request,response) => {
-    console.log(request);
-    db.query("INSERT INTO users SET ?", request,function(err,result,fileds){
-        if (err) throw err
-        console.log(result);
+    db.query("INSERT INTO users SET ?", request,function(error,result){
+        if (error) {
+            throw error
+        }
+        else {
+            throw result
+        }
     })
 }
 
