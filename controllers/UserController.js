@@ -1,10 +1,17 @@
 const User = require('../models/User')
-
+const {body} = require('express-validator')
+const UserSchema = require('./schemas/User')
 
 exports.store = async (req,res) => {
+    const validator = UserSchema.validate(req.body)
+    if (validator.errors.length > 0) {
+        return res.status(422).json({
+            errors: validator.errors
+        })
+    }
     try {
         const data = await User.createUser(req.body)
-
+        
         return res.status(201).json({
             message: 'User has been created!',
             data: data
@@ -17,7 +24,9 @@ exports.store = async (req,res) => {
     }
 }
 
+function rules() {
 
+}
 
 
 

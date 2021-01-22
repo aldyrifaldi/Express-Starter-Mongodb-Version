@@ -5,9 +5,7 @@ const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
 exports.createUser = async (request) => {
-
     let hashedPassword = await bcrypt.hash(request.password, 10)
-
     const User = await prisma.users.create({
         data: {
             name: request.name,
@@ -20,8 +18,6 @@ exports.createUser = async (request) => {
 }
 
 exports.getAllUsers = async () => {
-
     const Users = await prisma.users.findMany()
-
     return Users
 }
