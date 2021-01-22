@@ -1,0 +1,40 @@
+{
+    "dev": {
+        "host": { "ENV" : "DB_HOST" },
+        "user": { "ENV" : "DB_USER" },
+        "password" : { "ENV" : "DB_PASSWORD" },
+        "database": { "ENV" : "DB_NAME" },
+        "driver": { "ENV" : "DB_DRIVER" },
+        "multipleStatements": true
+    },
+  
+    "test": {
+      "driver": "sqlite3",
+      "filename": ":memory:"
+    },
+  
+    "prod": {
+      "driver": "mysql",
+      "user": "root",
+      "password": "root"
+    },
+  
+    "pg": {
+      "driver": "pg",
+      "user": "test",
+      "password": "test",
+      "host": "localhost",
+      "database": "mydb",
+      "port": "20144",
+      "ssl": "true",
+      "schema": "my_schema"
+    },
+  
+    "mongo": {
+      "driver": "mongodb",
+      "database": "my_db",
+      "host": "localhost"
+    },
+  
+    "other": "postgres://uname:pw@server.com/dbname"
+  }
