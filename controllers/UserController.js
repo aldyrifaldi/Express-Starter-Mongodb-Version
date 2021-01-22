@@ -1,26 +1,41 @@
 const User = require('../models/User')
 
-exports.create = (req,res) => {
-    let newUser = new User(req.query)
-    // handle null error
-    if (!newUser.name || !newUser.email || !newUser.password) {
-        res.status(400).send({
-            error:true,
-            message: 'Please provide name/email/password'
+
+exports.store = async (req,res) => {
+    try {
+        const data = await User.createUser(req.body)
+
+        return res.status(201).json({
+            message: 'User has been created!',
+            data: data
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+            error: error
         })
     }
-    else {
-        User.create(newUser,(err,user) => {
-            if (err) {
-                res.status(500).send({
-                    message: 'Internal Server Error',
-                })
-            }
-            else {
-                res.status(204).send({
-                    message: 'User Created!',
-                })
-            }
+}
+
+
+
+
+
+exports.index = async (req,res) => {
+    try {
+        const data = await User.getAllUsers()
+
+        return res.status(200).json({
+            message: 'Users Fetched Successfully',
+            data: data
         })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Internal Server Error!'
+        })        
     }
+}
+
+exports.login = (request,response) => {
+
 }

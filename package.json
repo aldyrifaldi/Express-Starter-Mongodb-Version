@@ -9,11 +9,16 @@
   "author": "aldyrifaldi",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^2.15.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.9.2",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.15.0"
   }
 }

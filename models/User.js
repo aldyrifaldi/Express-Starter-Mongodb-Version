@@ -1,23 +1,27 @@
-'use strict'
 const db = require('../config/db')
+const {PrismaClient} =  require("@prisma/client");
+const prisma = new PrismaClient({});
+const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
 
+exports.createUser = async (request) => {
 
-const User = function(user) {
-    this.name = user.name
-    this.email = user.email
-    this.password = user.password
-}
+    let hashedPassword = await bcrypt.hash(request.password, 10)
 
-
-User.create = (request,response) => {
-    db.query("INSERT INTO users SET ?", request,function(error,result){
-        if (error) {
-            throw error
-        }
-        else {
-            throw result
+    const User = await prisma.users.create({
+        data: {
+            name: request.name,
+            email: request.email,
+            password: hashedPassword,
         }
     })
+    
+    return User
 }
 
-module.exports = User
+exports.getAllUsers = async () => {
+
+    const Users = await prisma.users.findMany()
+
+    return Users
+}
