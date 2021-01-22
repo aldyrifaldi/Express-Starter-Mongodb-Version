@@ -1,9 +1,19 @@
 const User = require('../models/User')
-const {body} = require('express-validator')
-const UserSchema = require('./schemas/User')
+const InputValidator = require('./schemas/Validator')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const dotenv = require('dotenv')
+dotenv.config()
 
 exports.store = async (req,res) => {
-    const validator = UserSchema.validate(req.body)
+    const rules = {
+        name: {type: 'string',maxLength: 255,required: true},
+        email: {type: 'string',maxLength: 255,required: true,format:'email'},
+        password: {type: 'string',minLength: 8,required: true},
+    }
+
+    const validator = InputValidator.validate('User',req.body,rules)
+
     if (validator.errors.length > 0) {
         return res.status(422).json({
             errors: validator.errors
@@ -24,12 +34,6 @@ exports.store = async (req,res) => {
     }
 }
 
-function rules() {
-
-}
-
-
-
 exports.index = async (req,res) => {
     try {
         const data = await User.getAllUsers()
@@ -45,6 +49,48 @@ exports.index = async (req,res) => {
     }
 }
 
-exports.login = (request,response) => {
+exports.login = async (req,res) => {
+    // request validation
+    const rules = {
+        email: {type:"string",format:"email",required: true},
+        password: {type:"string",minLength:8,required: true},
+    }
 
+    const validator = InputValidator.validate("User",req.body,rules)
+    if (validator.errors.length > 0) {
+        return res.status(422).json({
+            errors: validator.errors
+        })
+    }
+
+    // get user by email
+    let attempt = await User.getUserByEmail(req.body.email)
+    // check password exists
+    let passwordExists = await bcrypt.compare(req.body.password,attempt.password)
+    if (!passwordExists) {
+        return res.status(401).json({
+            message: "Email or password doesn't exists!",
+        })
+    }
+
+    let payload = {
+        id: attempt.id,
+        name: attempt.name,
+        email: attempt.email,
+    }
+
+    let token = await generateToken(payload)
+    return res.status(201).json({
+        message: 'Authenticated!',
+        token: token
+    })
+}
+
+async function generateToken(payload) {
+    let token = await jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '3600'})
+    return token
+}
+
+exports.authenticated = (req) => {
+    console.log(req.rawHeaders);
 }

@@ -21,3 +21,12 @@ exports.getAllUsers = async () => {
     const Users = await prisma.users.findMany()
     return Users
 }
+
+exports.getUserByEmail = async (value) => {
+    
+    const User = await prisma.users.findFirst({
+        where: {email: value}
+    })
+
+    return User
+}
