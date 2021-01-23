@@ -1,9 +1,10 @@
-const User = require('../models/User')
-const InputValidator = require('./schemas/Validator')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt');
-const dotenv = require('dotenv');
-const { head } = require('../routes/auth');
+const User = require('../models/User'),
+    jwt = require('jsonwebtoken'),
+    InputValidator = require('./schemas/Validator'),
+    bcrypt = require('bcrypt'),
+    dotenv = require('dotenv')
+
+
 dotenv.config()
 
 // create user 
