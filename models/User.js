@@ -1,6 +1,6 @@
-const {PrismaClient} =  require("@prisma/client");
-const prisma = new PrismaClient({});
-const bcrypt = require('bcrypt');
+const {PrismaClient} =  require("@prisma/client"),
+    prisma = new PrismaClient({}),
+    bcrypt = require('bcrypt')
 
 exports.createUser = async (request) => {
     let hashedPassword = await bcrypt.hash(request.password, 10)

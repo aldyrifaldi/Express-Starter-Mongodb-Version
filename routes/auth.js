@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const UserController = require('../controllers/UserController')
-const jwtVerify = require('../middlewares/JwtMiddleware') // jwt middleware
+const express = require('express'),
+    router = express.Router(),
+    UserController = require('../controllers/UserController'),
+    jwtVerify = require('../middlewares/JwtMiddleware') // jwt middleware
 
 router.get('/users',jwtVerify,UserController.index)
 router.post('/register',UserController.store)

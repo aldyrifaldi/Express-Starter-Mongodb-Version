@@ -1,8 +1,9 @@
-const express = require('express')
-    app = express()
-    mysql = require('mysql')
-    bodyParser = require('body-parser')
-    dotenv = require('dotenv')
+const express = require('express'),
+    app = express(),
+    mysql = require('mysql'),
+    bodyParser = require('body-parser'),
+    dotenv = require('dotenv'),
+    cors = require('./config/cors')
 
 dotenv.config()
 // server port
@@ -15,17 +16,9 @@ const routes = require('./routes')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
-// Error handling
-app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
-    next();
-});
 
-// register routes
-// console.log('routes lah ',routes);
+app.use(cors)
+
 app.use(routes)
 
 

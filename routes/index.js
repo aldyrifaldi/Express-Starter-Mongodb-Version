@@ -1,6 +1,6 @@
-const express = require('express')
-const subApp = express()
-const authRoutes = require('./auth')
+const express = require('express'),
+    subApp = express(),
+    authRoutes = require('./auth')
 
 subApp.use('/api/auth/',authRoutes)
 
