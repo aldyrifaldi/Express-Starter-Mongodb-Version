@@ -7,7 +7,7 @@
         "driver": { "ENV" : "DB_DRIVER" },
         "multipleStatements": true
     },
-  
+    
     "test": {
       "driver": "sqlite3",
       "filename": ":memory:"

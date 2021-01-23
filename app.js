@@ -3,7 +3,8 @@ const express = require('express'),
     mysql = require('mysql'),
     bodyParser = require('body-parser'),
     dotenv = require('dotenv'),
-    cors = require('./config/cors')
+    cors = require('./config/cors'),
+    routeError = require('./routes/errors/internal-error')
 
 dotenv.config()
 // server port
@@ -16,13 +17,11 @@ const routes = require('./routes')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
-
 app.use(cors)
 
 app.use(routes)
 
-
-// database connection configuration
+// dsatabase connection configuration
 const mc = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
