@@ -1,7 +1,7 @@
-const express = require('express'),
-    app = express(),
-    mysql = require('mysql'),
-    bodyParser = require('body-parser'),
+const express = require('express')
+    app = express()
+    mysql = require('mysql')
+    bodyParser = require('body-parser')
     dotenv = require('dotenv')
 
 dotenv.config()
@@ -9,7 +9,7 @@ dotenv.config()
 const port = process.env.SERVER_PORT || 4500
 
 // call routes from auth
-const authRoutes = require('./routes/auth')
+const routes = require('./routes')
 
 // use body parser 
 app.use(bodyParser.json())
@@ -18,16 +18,15 @@ app.use(bodyParser.urlencoded({extended:true}))
 // Error handling
 app.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-     res.setHeader("Access-Control-Allow-Credentials", "true");
-     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
-   next();
- });
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Origin,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,Authorization");
+    next();
+});
 
-
-// use prefix /api/auth/
-app.use('/api/auth',authRoutes)
-
+// register routes
+// console.log('routes lah ',routes);
+app.use(routes)
 
 
 // database connection configuration

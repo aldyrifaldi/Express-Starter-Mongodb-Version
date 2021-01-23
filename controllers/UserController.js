@@ -2,9 +2,11 @@ const User = require('../models/User')
 const InputValidator = require('./schemas/Validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const { head } = require('../routes/auth');
 dotenv.config()
 
+// create user 
 exports.store = async (req,res) => {
     const rules = {
         name: {type: 'string',maxLength: 255,required: true},
@@ -20,6 +22,7 @@ exports.store = async (req,res) => {
         })
     }
     try {
+        
         const data = await User.createUser(req.body)
         
         return res.status(201).json({
@@ -73,11 +76,7 @@ exports.login = async (req,res) => {
         })
     }
 
-    let payload = {
-        id: attempt.id,
-        name: attempt.name,
-        email: attempt.email,
-    }
+    let payload = attempt
 
     let token = await generateToken(payload)
     return res.status(201).json({
@@ -87,10 +86,20 @@ exports.login = async (req,res) => {
 }
 
 async function generateToken(payload) {
-    let token = await jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '3600'})
+    let token = await jwt.sign(payload,process.env.JWT_SECRET)
     return token
 }
 
-exports.authenticated = (req) => {
-    console.log(req.rawHeaders);
+exports.authenticated = async (req,res) => {
+    try {
+        let token = req.headers.authorization.split(' ')[1]
+        let decoded = await jwt.verify(token,process.env.JWT_SECRET) 
+        return res.status(200).json({
+            data: decoded,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Internal server error!',
+        })
+    }
 }
