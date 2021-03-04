@@ -1,6 +1,5 @@
-const {PrismaClient} =  require("@prisma/client"),
-    prisma = new PrismaClient({}),
-    bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt'),
+    mongoose = require('mongoose')
 
 exports.createUser = async (request) => {
     let hashedPassword = await bcrypt.hash(request.password, 10)
