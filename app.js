@@ -21,13 +21,6 @@ app.use(cors)
 
 app.use(routes)
 
-// dsatabase connection configuration
-const mc = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-})
 
 // connect to database
 mc.connect()
