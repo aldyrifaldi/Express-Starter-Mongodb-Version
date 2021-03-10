@@ -9,7 +9,7 @@ exports.success = async(res,data,status = Http.OK) => {
 
 exports.errorIncludeValidator = async (res,error, status = Http.INTERNAL_SERVER_ERROR) => {
     const validator = await Validator(error)
-    console.log(validator);
+    
     if (validator.length > 0) {
         return res.status(Http.UNPROCESSABLE_ENTITY).json({
             errors: validator
