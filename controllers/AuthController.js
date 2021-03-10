@@ -28,6 +28,9 @@ exports.register = async(req,res) => {
 
     } catch (e) {
         const errors = await validation(e) // request validation
+        console.log(errors);
+         
+        return res.status(422).json(errors)
         let statusCode = 500 // default internal server error status code
         let responseErrors = {
             error: e
@@ -39,7 +42,6 @@ exports.register = async(req,res) => {
             }
         }
 
-        return res.status(statusCode).json(responseErrors)
     }
 }
 

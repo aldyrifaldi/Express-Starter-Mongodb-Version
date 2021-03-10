@@ -1,9 +1,22 @@
 module.exports = async(err) => {
-    let errors = []
+    let errors = {}
+
+    // unique validator
+    if (err.code == 11000) {
+        let path = Object.keys(err.keyPattern)[0]
+        errors[path] = {
+            message: 'already exists',
+            type: 'unique',
+            path: path,
+        }
+        
+        return errors
+    }
+
+    // other validator
     if (err.message.includes('User validation failed')) {
         const errorsObj = Object.values(err.errors)
         errors = errorsObj.map(({properties}) => {
-            console.log(properties);
             return {
                 message: properties.message,
                 path: properties.path,
@@ -12,6 +25,6 @@ module.exports = async(err) => {
             }
         })
     }
-    
+
     return errors.length > 0 ? errors : []
 }
