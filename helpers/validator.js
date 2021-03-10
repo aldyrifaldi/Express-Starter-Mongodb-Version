@@ -9,22 +9,26 @@ module.exports = async(err) => {
             type: 'unique',
             path: path,
         }
-        
-        return errors
+        return [errors]
     }
 
     // other validator
     if (err.message.includes('User validation failed')) {
         const errorsObj = Object.values(err.errors)
-        errors = errorsObj.map(({properties}) => {
-            return {
+        let kVal = {}
+
+        // loop error exceptions
+        errorsObj.forEach(({properties}) => {
+            // set attributes to array object
+            kVal[properties.path] = {
                 message: properties.message,
                 path: properties.path,
                 value: properties.value,
                 type: properties.type,
-            }
+            } 
         })
+        errors = [kVal] // set to errors variable
     }
 
-    return errors.length > 0 ? errors : []
+    return errors;
 }

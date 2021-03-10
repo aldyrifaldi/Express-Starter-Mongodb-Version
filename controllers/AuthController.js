@@ -2,7 +2,8 @@ const User = require('../models/User'),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcrypt'),
     dotenv = require('dotenv'),
-    validation = require('../helpers/validator')
+    validation = require('../helpers/validator'),
+    Response = require('../helpers/response')
 
 dotenv.config()
 
@@ -18,30 +19,14 @@ exports.register = async(req,res) => {
             })
         }
         // create user
-
         const user = await User.create(req.body)
 
         return res.status(200).json({
             data: user // created user
         })
 
-
     } catch (e) {
-        const errors = await validation(e) // request validation
-        console.log(errors);
-         
-        return res.status(422).json(errors)
-        let statusCode = 500 // default internal server error status code
-        let responseErrors = {
-            error: e
-        }
-        if (errors.length > 0) { // if have error validation
-            statusCode = 422 // validation error status code
-            responseErrors = {
-                errors: errors
-            }
-        }
-
+        return Response.error(res,e)
     }
 }
 
