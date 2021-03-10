@@ -1,29 +1,41 @@
-const bcrypt = require('bcrypt'),
-    mongoose = require('mongoose')
+const   mongoose = require('mongoose'),
+        validator = require('validator')
 
-exports.createUser = async (request) => {
-    let hashedPassword = await bcrypt.hash(request.password, 10)
-    const User = await prisma.users.create({
-        data: {
-            name: request.name,
-            email: request.email,
-            password: hashedPassword,
-        }
-    })
-    
-    return User
-}
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: [true,'is already exists'],
+        lowercase: true,
+        validate: {
+            validator: (value) => {
+                return new Promise((resolve, reject) => {
+                    resolve(validator.isEmail(value));
+                });
+            },
+            message: 'is not a valid email',
+            type: 'email'
+        },
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    email_verified_at: {
+        type: Date,
+        required: false,
+        default: null,
+    }
+},
+{
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+    }
+})
 
-exports.getAllUsers = async () => {
-    const Users = await prisma.users.findMany()
-    return Users
-}
-
-exports.getUserByEmail = async (value) => {
-    
-    const User = await prisma.users.findFirst({
-        where: {email: value}
-    })
-
-    return User
-}
+module.exports = mongoose.model('User',userSchema)

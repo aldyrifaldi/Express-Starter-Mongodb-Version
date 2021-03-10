@@ -1,11 +1,10 @@
 const express = require('express'),
     router = express.Router(),
-    UserController = require('../controllers/UserController'),
+    AuthController = require('../controllers/AuthController'),
     jwtVerify = require('../middlewares/JwtMiddleware') // jwt middleware
 
-router.get('/users',jwtVerify,UserController.index)
-router.post('/register',UserController.store)
-router.post('/login',UserController.login)
-router.get('/me',jwtVerify,UserController.authenticated)
+    router.post('/register',AuthController.register)
+// router.post('/login',AuthController.login)
+// router.get('/me',jwtVerify,AuthController.authenticated)
 
 module.exports = router
