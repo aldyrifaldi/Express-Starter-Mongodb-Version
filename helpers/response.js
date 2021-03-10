@@ -1,16 +1,28 @@
-const Validator = require('../helpers/validator')
+const   Validator = require('../helpers/validator'),
+        Http = require('../enums/response-code')
 
-exports.error = async (response,error) => {
+exports.success = async(res,data,status = Http.OK) => {
+    return res.status(status).json({
+        data: data
+    })
+}
+
+exports.errorIncludeValidator = async (res,error, status = Http.INTERNAL_SERVER_ERROR) => {
     const validator = await Validator(error)
-
-    console.log(validator.length);
+    console.log(validator);
     if (validator.length > 0) {
-        return response.status(422).json({
+        return res.status(Http.UNPROCESSABLE_ENTITY).json({
             errors: validator
         })
     }
 
-    return response.status(500).json({
+    return res.status(status).json({
         errors: error
+    })
+}
+
+exports.error = async (res,error,status = Http.INTERNAL_SERVER_ERROR) => {
+    return res.status(status).json({
+        error: error
     })
 }
