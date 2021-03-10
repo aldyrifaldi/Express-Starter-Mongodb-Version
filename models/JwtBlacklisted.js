@@ -2,11 +2,12 @@ const { Mongoose } = require("mongoose");
 const mongoose = require('mongoose')
 
 
-const jBListSchema = new mongoose.schema(
+const jBListSchema = new mongoose.Schema(
     {
         token: {
             type: String,
-            required: true
+            required: true,
+            unique: [true,'is already exists'],
         },
     },
     {

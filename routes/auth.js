@@ -5,6 +5,7 @@ const express = require('express'),
 
     router.post('/register',AuthController.register)
     router.post('/login',AuthController.login)
-// router.get('/me',jwtVerify,AuthController.authenticated)
+    router.post('/logout',AuthController.logout)
+    router.get('/me',jwtVerify,AuthController.authenticated)
 
 module.exports = router
