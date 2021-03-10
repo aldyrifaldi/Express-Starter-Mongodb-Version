@@ -2,9 +2,8 @@ const User = require('../models/User'),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcrypt'),
     dotenv = require('dotenv'),
-    validation = require('../helpers/validator'),
     Response = require('../helpers/response')
-
+    
 dotenv.config()
 
 
@@ -12,21 +11,13 @@ exports.register = async(req,res) => {
 
     try {
 
-        if (req.body.password != req.body.password_confirmation) {
-            return res.status(422),json({
-                errors: {
-                }
-            })
-        }
-        // create user
+        // create user  
         const user = await User.create(req.body)
 
-        return res.status(200).json({
-            data: user // created user
-        })
+        return Response.success(res,user)
 
     } catch (e) {
-        return Response.error(res,e)
+        return Response.errorIncludeValidator(res,e)
     }
 }
 
